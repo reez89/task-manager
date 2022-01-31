@@ -22,10 +22,12 @@ export class AuthController {
         }
 
         const hashedPw = await bcrypt.hash( body.password, 12 );
-        return this.userService.createUser( {
+
+
+        return this.userService.create( {
             userName: body.userName,
-            role: body.role,
             password: hashedPw,
+            role: { id: 1 }
         } );
     }
 
@@ -36,7 +38,7 @@ export class AuthController {
         @Body( 'password' ) password: string,
         @Res( { passthrough: true } ) response: Response
     ) {
-        const user = await this.userService.findOneUser( { userName } );
+        const user = await this.userService.find( { userName } );
 
         if ( !user ) {
             throw new NotFoundException( 'User not found' );
@@ -60,7 +62,7 @@ export class AuthController {
 
         const data = await this.jwtService.verifyAsync( cookie );
 
-        return this.userService.findOneUser( { id: data.id } );
+        return this.userService.find( { id: data.id } );
     }
 
     @Post( 'logout' )

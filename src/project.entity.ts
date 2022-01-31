@@ -24,6 +24,6 @@ export class Project {
     @ManyToOne( () => Client, client => client.id )
     client: number;
 
-    @OneToMany( () => Task, task => task.id )
+    @OneToMany( () => Task, task => task.project )
     task: Task[];
 }

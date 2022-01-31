@@ -1,6 +1,6 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Project } from "./project.entity";
-import { TaskInterface } from "./task.interface";
+import { User } from "./user.entity";
 
 @Entity()
 export class Task {
@@ -22,5 +22,7 @@ export class Task {
     @ManyToOne( () => Project, project => project.id )
     project: number;
 
+    @ManyToOne( () => User, user => user.id )
+    user: number;
 
-}
+}   

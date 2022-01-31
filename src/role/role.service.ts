@@ -1,0 +1,16 @@
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { AbstractService } from 'src/common/abstract.service';
+import { Role } from 'src/role.entity';
+import { Repository } from 'typeorm';
+
+
+@Injectable()
+export class RoleService extends AbstractService {
+    constructor(
+        @InjectRepository( Role ) private roleRepository: Repository<Role>
+    ) {
+        super( roleRepository );
+    }
+
+}

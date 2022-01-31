@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 @Injectable()
 export class ProjectService {
 
+
     constructor(
         @InjectRepository( Project )
         private projectRepository: Repository<Project>
@@ -15,8 +16,18 @@ export class ProjectService {
 
     getAllProjects(): Promise<Project[]> {
         return this.projectRepository.find( {
-            relations: [ 'client' ]
+            relations: [ 'client', 'task' ]
         } ); // S
+    }
+
+    async getProjectById( id: number ): Promise<Project> {
+        try {
+            const project = await this.projectRepository.findOneOrFail( id ); // SELECT * FROM users WHERE user.id = id
+            return project;
+        } catch ( err ) {
+            console.log( err );
+            throw err;
+        }
     }
 
     createProject( projectName: string, clientName: string, expectedDelivery?: string, status?: string, client?: number ): Promise<Project> {
@@ -29,5 +40,19 @@ export class ProjectService {
         } );
 
         return this.projectRepository.save( newProject );
+    }
+
+    async updateProject( id: number, status: string ): Promise<Project> {
+        const project = await this.getProjectById( id );
+
+        project.status = status;
+        return this.projectRepository.save( project );
+    };
+
+    async removeProject( id: number ): Promise<Project> {
+
+        const project = await this.getProjectById( id );
+
+        return this.projectRepository.remove( project );
     }
 }

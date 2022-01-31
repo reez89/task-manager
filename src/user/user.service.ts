@@ -1,41 +1,31 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { AbstractService } from 'src/common/abstract.service';
+import { PaginatedResult } from 'src/common/paginated-result.interface';
 import { User } from 'src/user.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
-export class UserService {
+export class UserService extends AbstractService {
 
 
     constructor(
         @InjectRepository( User )
         private userRepository: Repository<User>,
-    ) {}
-
-    getAllUsers(): Promise<User[]> {
-        return this.userRepository.find( {
-            relations: [ 'task' ]
-        } ); // S
+    ) {
+        super( userRepository );
     }
 
-    async createUser( data ): Promise<User> {
-        return this.userRepository.save( data );
-    }
+    async paginate( page: number = 1, relations: any[] = [] ): Promise<any> {
 
-    async findOneUser( condition ): Promise<User> {
-        return this.userRepository.findOne( condition );
-    }
+        const { data, meta } = await super.paginate( page, relations );
 
-    async getUserByName( username: string ): Promise<any> {
-        const user: User = await this.userRepository.createQueryBuilder()
-            .where( 'user.username LIKE :username', { username } )
-            .select( [
-                "user.id",
-                "user.userName",
-                'user.role'
-            ] )
-            .execute();
-        return user[ 0 ];
+        return {
+            data: data.map( user => {
+                const { password, ...data } = user;
+                return data;
+            } ),
+            meta
+        };
     }
-
 }
