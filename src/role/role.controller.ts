@@ -1,5 +1,6 @@
 import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Put, UseInterceptors } from '@nestjs/common';
-import { Role } from 'src/role.entity';
+import { HasPermission } from 'src/permission/permission-decorator';
+import { Role } from 'src/entities/role.entity';
 import { RoleService } from './role.service';
 
 
@@ -9,11 +10,14 @@ export class RoleController {
     constructor( private roleService: RoleService ) {}
 
     @Get()
+    @HasPermission( 'roles' )
+
     async getAll() {
         return this.roleService.all();
     }
 
     @Post()
+    @HasPermission( 'roles' )
     async createRole(
         @Body( 'name' ) name: string,
         @Body( 'permissions' ) ids: number[]
@@ -27,11 +31,15 @@ export class RoleController {
 
     @UseInterceptors( ClassSerializerInterceptor )
     @Get( ':id' )
+    @HasPermission( 'roles' )
+
     async getUserById( @Param( 'id' ) id: number ) {
         return this.roleService.find( { id }, [ 'permissions' ] );
     }
 
     @Put( ':id' )
+    @HasPermission( 'roles' )
+
     async updateRole(
         @Param( 'id' ) id: number,
         @Body( 'name' ) name: string,
@@ -50,6 +58,8 @@ export class RoleController {
     }
 
     @Delete( ':id' )
+    @HasPermission( 'roles' )
+
     async deleteUser( @Param( 'id' ) id: number ) {
         return this.roleService.delete( id );
     }

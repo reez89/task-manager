@@ -1,11 +1,12 @@
 import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Put, Query, UseGuards, UseInterceptors } from '@nestjs/common';
 import { AuthService } from 'src/auth/auth.service';
-import { User } from 'src/user.entity';
+import { User } from 'src/entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { UserService } from './user.service';
 import { UserCreateDto } from './models/user-create.dto';
 import { AuthGuard } from '../auth/auth.guard';
 import { UserUpdateDto } from './models/user-update.dto';
+import { HasPermission } from 'src/permission/permission-decorator';
 
 @UseGuards( AuthGuard )
 @Controller( 'user' )
@@ -17,6 +18,7 @@ export class UserController {
 
     @UseInterceptors( ClassSerializerInterceptor )
     @Get()
+    @HasPermission( 'users' )
     async getAllUsers( @Query( 'page' ) page: number = 1 ) {
         return this.userService.paginate( page, [ 'role', 'task' ] );
 
@@ -24,6 +26,7 @@ export class UserController {
 
     @UseInterceptors( ClassSerializerInterceptor )
     @Post()
+    @HasPermission( 'users' )
     async create( @Body() body: UserCreateDto ): Promise<User> {
         const password = await bcrypt.hash( '1234', 12 );
 
@@ -35,14 +38,16 @@ export class UserController {
             role: { id: role_id }
         } );
     }
-
     @UseInterceptors( ClassSerializerInterceptor )
     @Get( ':id' )
+    @HasPermission( 'users' )
+
     async getUserById( @Param( 'id' ) id: number ) {
         return this.userService.find( { id }, [ 'role', 'task' ] );
     }
 
     @Put( ':id' )
+    @HasPermission( 'users' )
     async updateUser(
         @Param( 'id' ) id: number,
         @Body() body: UserUpdateDto
@@ -59,6 +64,7 @@ export class UserController {
     }
 
     @Delete( ':id' )
+    @HasPermission( 'users' )
     async deleteUser( @Param( 'id' ) id: number ) {
         return this.userService.delete( id );
     }

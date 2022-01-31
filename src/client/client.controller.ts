@@ -1,14 +1,40 @@
-import { Controller, Get } from '@nestjs/common';
-import { Client } from 'src/client.entity';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { Client } from 'src/entities/client.entity';
+import { ClientCreateDto } from 'src/user/models/client-create.dto';
+import { ClientUpdateDto } from 'src/user/models/client-update.dto';
 import { ClientService } from './client.service';
 
 @Controller( 'clients' )
 export class ClientController {
-    constructor( private userService: ClientService ) {}
-    @Get()
-    allUsers(): Promise<Client[]> {
-        // const user = await this.userService.createClient( 'YOLO', );
+    constructor( private clientService: ClientService ) {}
 
-        return this.userService.getAllClients();
+
+    @Get()
+    all( @Query( 'page' ) page: number = 1 ) {
+        return this.clientService.paginate( page, [ 'projects' ] );
+    }
+
+    @Post()
+    async createTask( @Body() body: ClientCreateDto ) {
+        return this.clientService.create( body );
+    }
+
+    @Get( ':id' )
+    async get( @Param( 'id' ) id: number ) {
+        return this.clientService.find( { id } );
+    }
+
+    @Put( ':id' )
+    async updateTask(
+        @Param( 'id' ) id: number,
+        @Body() body: ClientUpdateDto ) {
+        await this.clientService.update( id, body );
+
+        return this.clientService.find( { id } );
+    }
+
+    @Delete( ':id' )
+    async delete( @Param( 'id' ) id: number ) {
+        return this.clientService.delete( id );
     }
 }

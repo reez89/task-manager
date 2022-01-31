@@ -10,6 +10,11 @@ import { AuthModule } from './auth/auth.module';
 import { RoleModule } from './role/role.module';
 import { PermissionModule } from './permission/permission.module';
 import { CommonModule } from './common/common.module';
+import { APP_GUARD } from '@nestjs/core';
+import { PermissionGuard } from './permission/permission.guard';
+import { AuthService } from './auth/auth.service';
+import { UserService } from './user/user.service';
+import { RoleService } from './role/role.service';
 
 
 @Module( {
@@ -25,6 +30,11 @@ import { CommonModule } from './common/common.module';
     CommonModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: PermissionGuard
+    },
+  ],
 } )
 export class AppModule {}

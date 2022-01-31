@@ -3,7 +3,7 @@ import { Client } from "./client.entity";
 import { Task } from "./task.entity";
 
 
-@Entity()
+@Entity( 'projects' )
 export class Project {
 
     @PrimaryGeneratedColumn()

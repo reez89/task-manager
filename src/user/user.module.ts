@@ -1,17 +1,19 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthService } from 'src/auth/auth.service';
-import { Task } from 'src/task.entity';
-import { TaskService } from 'src/task/task.service';
-import { User } from 'src/user.entity';
+import { User } from 'src/entities/user.entity';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { CommonModule } from 'src/common/common.module';
-import { Permission } from 'src/permission.entity';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module( {
-  imports: [ TypeOrmModule.forFeature( [ User, Task, Permission ] ), CommonModule ],
+  imports: [
+    TypeOrmModule.forFeature( [ User ] ),
+    CommonModule,
+    AuthModule
+  ],
   controllers: [ UserController ],
-  providers: [ UserService, TaskService, AuthService ]
+  providers: [ UserService ],
+  exports: [ UserService ]
 } )
 export class UserModule {}
