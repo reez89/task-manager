@@ -18,7 +18,7 @@ export class UserController {
 
     @UseInterceptors( ClassSerializerInterceptor )
     @Get()
-    @HasPermission( 'users' )
+    @HasPermission( 'user' )
     async getAllUsers( @Query( 'page' ) page: number = 1 ) {
         return this.userService.paginate( page, [ 'role', 'task' ] );
 
@@ -26,7 +26,7 @@ export class UserController {
 
     @UseInterceptors( ClassSerializerInterceptor )
     @Post()
-    @HasPermission( 'users' )
+    @HasPermission( 'user' )
     async create( @Body() body: UserCreateDto ): Promise<User> {
         const password = await bcrypt.hash( '1234', 12 );
 
@@ -40,14 +40,14 @@ export class UserController {
     }
     @UseInterceptors( ClassSerializerInterceptor )
     @Get( ':id' )
-    @HasPermission( 'users' )
+    @HasPermission( 'user' )
 
     async getUserById( @Param( 'id' ) id: number ) {
         return this.userService.find( { id }, [ 'role', 'task' ] );
     }
 
     @Put( ':id' )
-    @HasPermission( 'users' )
+    @HasPermission( 'user' )
     async updateUser(
         @Param( 'id' ) id: number,
         @Body() body: UserUpdateDto
@@ -64,7 +64,7 @@ export class UserController {
     }
 
     @Delete( ':id' )
-    @HasPermission( 'users' )
+    @HasPermission( 'user' )
     async deleteUser( @Param( 'id' ) id: number ) {
         return this.userService.delete( id );
     }

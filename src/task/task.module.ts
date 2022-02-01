@@ -9,7 +9,7 @@ import { TaskService } from './task.service';
 @Module( {
   imports: [
     TypeOrmModule.forFeature( [ Task, Project ] ),
-    CommonModule
+    CommonModule,
   ],
   controllers: [ TaskController ],
   providers: [ TaskService ]

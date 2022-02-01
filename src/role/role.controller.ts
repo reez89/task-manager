@@ -11,7 +11,6 @@ export class RoleController {
 
     @Get()
     @HasPermission( 'roles' )
-
     async getAll() {
         return this.roleService.all();
     }
