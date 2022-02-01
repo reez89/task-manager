@@ -1,4 +1,5 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Expose } from "class-transformer";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Project } from "./project.entity";
 import { User } from "./user.entity";
 
@@ -19,10 +20,25 @@ export class Task {
     @Column()
     state: string;
 
-    @ManyToOne( () => Project, project => project.id )
-    project: number;
+    @CreateDateColumn()
+    created_at: string;
 
-    @ManyToOne( () => User, user => user.id )
-    user: number;
+    @ManyToOne( () => Project, project => project.task )
+    @JoinColumn( { name: 'project_id' } )
+    project: Project;
 
-}   
+    @ManyToOne( () => User, user => user.task )
+    @JoinColumn(
+        {
+            name: 'user_id',
+            referencedColumnName: 'id'
+        },
+    )
+    user: User;
+
+    // @Expose()
+    // get developer() {
+    //     return this.user;
+    // }
+}
+

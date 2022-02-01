@@ -7,13 +7,7 @@ export abstract class AbstractService {
 
     constructor( protected readonly repository: Repository<any> ) {}
 
-    getAllUsers(): Promise<any[]> {
-        return this.repository.find( {
-            relations: [ 'task' ]
-        } );
-    }
-
-    all( relations: any = [] ): Promise<any[]> {
+    async all( relations: any = [] ): Promise<any[]> {
         return this.repository.find( { relations } );
     }
 

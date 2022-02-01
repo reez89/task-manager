@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Client } from "./client.entity";
 import { Task } from "./task.entity";
 
@@ -20,6 +20,9 @@ export class Project {
 
     @Column()
     status: string;
+
+    @CreateDateColumn()
+    created_at: string;
 
     @ManyToOne( () => Client, client => client.id )
     client: number;

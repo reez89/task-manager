@@ -5,10 +5,11 @@ import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { CommonModule } from 'src/common/common.module';
 import { AuthModule } from 'src/auth/auth.module';
+import { Permission } from 'src/entities/permission.entity';
 
 @Module( {
   imports: [
-    TypeOrmModule.forFeature( [ User ] ),
+    TypeOrmModule.forFeature( [ User, Permission ] ),
     CommonModule,
     AuthModule
   ],

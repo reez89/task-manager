@@ -1,4 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, SetMetadata, UseGuards } from '@nestjs/common';
+import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Patch, Post, Put, Query, SetMetadata, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Task } from 'src/entities/task.entity';
 import { TaskCreateDto } from 'src/user/models/task-create.dto';
 import { TaskUpdateDto } from 'src/user/models/task-update.dto';
 import { AuthGuard } from '../auth/auth.guard';
@@ -10,15 +11,21 @@ export class TaskController {
 
     constructor( private taskService: TaskService ) {}
 
-
+    @UseInterceptors( ClassSerializerInterceptor )
     @Get()
     async all( @Query( 'page' ) page: number = 1 ) {
-        return this.taskService.paginate( page );
+
+        return this.taskService.paginate( page, [ 'user' ] );
     }
 
     @Post()
-    async createTask( @Body() body: TaskCreateDto ) {
-        return this.taskService.create( body );
+    async createTask( @Body() body: TaskCreateDto, ): Promise<Task> {
+        const { project_id, user_id, ...data } = body;
+        return this.taskService.create( {
+            ...data,
+            project: { id: project_id },
+            user: { id: user_id }
+        } );
     }
 
     @Get( ':id' )
@@ -27,8 +34,17 @@ export class TaskController {
     }
 
     @Put( ':id' )
-    async updateTask( @Param( 'id' ) id: number, @Body() body: TaskUpdateDto ) {
-        await this.taskService.update( id, body );
+    async updateTask(
+        @Param( 'id' ) id: number,
+        @Body() body: TaskUpdateDto
+    ) {
+        const { project_id, user_id, ...data } = body;
+
+        await this.taskService.update( id, {
+            ...data,
+            project: { id: project_id },
+            user: { id: user_id }
+        } );
 
         return this.taskService.find( { id } );
     }
