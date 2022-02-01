@@ -15,7 +15,7 @@ export class PermissionController {
     async getAllPermissions(): Promise<Permission[]> {
         return this.permissionService.all();
     }
-    // @HasPermission( 'permissions' )
+    @HasPermission( 'permissions' )
     @Post()
     async createPermission(
         @Body( 'name' ) name: string
