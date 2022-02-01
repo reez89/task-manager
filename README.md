@@ -46,5 +46,38 @@ $ npm run start:prod
 ```
 ## API
 ```bash
-# on going 
+# REGISTER (POST): 
+http://localhost:3000/auth/login
+# LOGIN (POST): 
+http://localhost:3000/auth/login
+# LOGOUT (POST): 
+http://localhost:3000/auth/logout
+
+# GET :
+http://localhost:3000/permission
+http://localhost:3000/role
+http://localhost:3000/user
+http://localhost:3000/client
+http://localhost:3000/projects
+
+# PUT
+http://localhost:3000/permission/{id}
+http://localhost:3000/role/{id}
+http://localhost:3000/user/{id}
+http://localhost:3000/client/{id}
+http://localhost:3000/projects/{id}
+
+# POST
+http://localhost:3000/permission
+http://localhost:3000/role
+http://localhost:3000/user
+http://localhost:3000/client
+http://localhost:3000/projects
+
+# DELETE
+http://localhost:3000/permission/{id}
+http://localhost:3000/role/{id}
+http://localhost:3000/user/{id}
+http://localhost:3000/client/{id}
+http://localhost:3000/projects/{id} 
 ```

@@ -12,7 +12,6 @@ import { Permission } from 'src/entities/permission.entity';
     TypeOrmModule.forFeature( [ User, Permission ] ),
     CommonModule,
     forwardRef( () => AuthModule ),
-
   ],
   controllers: [ UserController ],
   providers: [ UserService ],

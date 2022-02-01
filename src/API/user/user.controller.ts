@@ -14,8 +14,7 @@ import { AuthGuard } from 'src/auth/auth.guard';
 export class UserController {
 
     constructor(
-        private userService: UserService,
-        private authService: AuthService ) {}
+        private userService: UserService ) {}
 
     @UseInterceptors( ClassSerializerInterceptor )
     @Get()
