@@ -7,4 +7,5 @@ export class ProjectCreateDto {
     clientName: string;
     expectedDelivery: string;
     status: string;
+    client_id: string;
 }

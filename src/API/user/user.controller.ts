@@ -3,10 +3,11 @@ import { AuthService } from 'src/auth/auth.service';
 import { User } from 'src/entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { UserService } from './user.service';
-import { UserCreateDto } from './models/user-create.dto';
-import { AuthGuard } from '../auth/auth.guard';
-import { UserUpdateDto } from './models/user-update.dto';
-import { HasPermission } from 'src/permission/permission-decorator';
+import { HasPermission } from '../permission/permission-decorator';
+import { UserCreateDto } from 'src/models/user-create.dto';
+import { UserUpdateDto } from 'src/models/user-update.dto';
+import { AuthGuard } from 'src/auth/auth.guard';
+
 
 @UseGuards( AuthGuard )
 @Controller( 'user' )

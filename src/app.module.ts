@@ -2,19 +2,20 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import config from 'config';
 
-import { ClientModule } from './client/client.module';
-import { ProjectModule } from './project/project.module';
-import { TaskModule } from './task/task.module';
-import { UserModule } from './user/user.module';
-import { AuthModule } from './auth/auth.module';
-import { RoleModule } from './role/role.module';
-import { PermissionModule } from './permission/permission.module';
+import { ClientModule } from './API/client/client.module';
+
 import { CommonModule } from './common/common.module';
 import { APP_GUARD } from '@nestjs/core';
-import { PermissionGuard } from './permission/permission.guard';
-import { AuthService } from './auth/auth.service';
-import { UserService } from './user/user.service';
-import { RoleService } from './role/role.service';
+import { AuthModule } from './auth/auth.module';
+import { ProjectModule } from './API/project/project.module';
+import { TaskModule } from './API/task/task.module';
+import { UserModule } from './API/user/user.module';
+import { RoleModule } from './API/role/role.module';
+import { PermissionModule } from './API/permission/permission.module';
+import { PermissionGuard } from './API/permission/permission.guard';
+
+
+
 
 
 @Module( {
