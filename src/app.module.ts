@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import config from 'config';
+
 
 import { ClientModule } from './API/client/client.module';
 
@@ -21,9 +21,9 @@ import { PermissionGuard } from './API/permission/permission.guard';
       type: 'sqlite',
       database: 'db',
       entities: [ 'dist/src/entities/*.entity.js' ],
+      //IMPOSTARE sync a FALSE PER UTILIZZARE LA MIGRATION
       synchronize: true,
       autoLoadEntities: true,
-
       /* DISATTIVARE IN CASO SI VOGLIA UTILIZZARE LA MIGRATION PER AGGIORNARE LA TABELLA */
       // migrations: [
       //     'dist/src/db/migrations/*.js'
