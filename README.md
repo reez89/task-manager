@@ -90,3 +90,19 @@ http://localhost:3000/user/{id}
 http://localhost:3000/client/{id}
 http://localhost:3000/projects/{id} 
 ```
+
+## SEEDING
+```bash
+
+# Users 
+"seed:users": "ts-node src/seeding/users.seeder.ts",
+
+# Projects
+"seed:projects": "ts-node src/seeding/projects.seeder.ts",
+
+#Tasks
+"seed:tasks": "ts-node src/seeding/tasks.seeder.ts",
+
+#Permissions and admin role permissions
+"seed:permissions": "ts-node src/seeding/permissions.seeder.ts"
+```
