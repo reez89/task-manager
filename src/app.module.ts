@@ -14,20 +14,31 @@ import { RoleModule } from './API/role/role.module';
 import { PermissionModule } from './API/permission/permission.module';
 import { PermissionGuard } from './API/permission/permission.guard';
 
-
-
-
-
 @Module( {
   imports: [
     ClientModule,
-    TypeOrmModule.forRoot( config ),
+    TypeOrmModule.forRoot( {
+      type: 'sqlite',
+      database: 'db',
+      entities: [ 'dist/src/entities/*.entity.js' ],
+      synchronize: true,
+      autoLoadEntities: true,
+
+      /* DISATTIVARE IN CASO SI VOGLIA UTILIZZARE LA MIGRATION PER AGGIORNARE LA TABELLA */
+      // migrations: [
+      //     'dist/src/db/migrations/*.js'
+      // ],
+      // cli: {
+      //     migrationsDir: "src/db/migrations"
+      // }
+    } ),
     ProjectModule,
     TaskModule,
     UserModule,
     AuthModule,
     RoleModule,
     PermissionModule,
+    ClientModule,
     CommonModule,
   ],
   controllers: [],

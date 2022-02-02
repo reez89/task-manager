@@ -9,8 +9,6 @@ export class TaskCreateDto {
     priority: string;
     @IsNotEmpty()
     state: string;
-    @IsNotEmpty()
     project_id: number;
-
     user_id: number;
 }

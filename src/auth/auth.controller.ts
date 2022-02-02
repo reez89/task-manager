@@ -4,7 +4,7 @@ import { RegisterDto } from './models/register.dto';
 import { JwtService } from '@nestjs/jwt';
 import { Response, Request } from 'express';
 import { AuthGuard } from './auth.guard';
-import { UserService } from 'src/API/user/user.service';
+import { UserService } from '../API/user/user.service';
 
 
 @Controller( 'auth' )

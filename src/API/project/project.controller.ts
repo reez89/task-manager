@@ -1,10 +1,10 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { ProjectService } from './project.service';
 
-import { ProjectCreateDto } from 'src/models/project-create.dto';
-import { ProjectUpdateDto } from 'src/models/project-update.dto';
+import { ProjectCreateDto } from '../../models/project-create.dto';
+import { ProjectUpdateDto } from '../../models/project-update.dto';
 import { HasPermission } from '../permission/permission-decorator';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from '../../auth/auth.guard';
 
 
 

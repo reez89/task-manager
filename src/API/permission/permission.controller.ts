@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
-import { AuthGuard } from 'src/auth/auth.guard';
-import { Permission } from 'src/entities/permission.entity';
+import { AuthGuard } from '../../auth/auth.guard';
+import { Permission } from '../../entities/permission.entity';
 import { HasPermission } from './permission-decorator';
 import { PermissionService } from './permission.service';
 

@@ -1,5 +1,5 @@
 import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Put, UseInterceptors } from '@nestjs/common';
-import { Role } from 'src/entities/role.entity';
+import { Role } from '../../entities/role.entity';
 import { HasPermission } from '../permission/permission-decorator';
 import { RoleService } from './role.service';
 

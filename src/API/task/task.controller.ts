@@ -1,9 +1,9 @@
 import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Patch, Post, Put, Query, SetMetadata, UseGuards, UseInterceptors } from '@nestjs/common';
-import { AuthGuard } from 'src/auth/auth.guard';
-import { Task } from 'src/entities/task.entity';
+import { AuthGuard } from '../../auth/auth.guard';
+import { Task } from '../../entities/task.entity';
 
-import { TaskCreateDto } from 'src/models/task-create.dto';
-import { TaskUpdateDto } from 'src/models/task-update.dto';
+import { TaskCreateDto } from '../../models/task-create.dto';
+import { TaskUpdateDto } from '../../models/task-update.dto';
 
 import { HasPermission } from '../permission/permission-decorator';
 

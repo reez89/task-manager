@@ -1,12 +1,12 @@
 import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Put, Query, UseGuards, UseInterceptors } from '@nestjs/common';
-import { AuthService } from 'src/auth/auth.service';
-import { User } from 'src/entities/user.entity';
+import { AuthService } from '../../auth/auth.service';
+import { User } from '../../entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { UserService } from './user.service';
 import { HasPermission } from '../permission/permission-decorator';
-import { UserCreateDto } from 'src/models/user-create.dto';
-import { UserUpdateDto } from 'src/models/user-update.dto';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { UserCreateDto } from '../../models/user-create.dto';
+import { UserUpdateDto } from '../../models/user-update.dto';
+import { AuthGuard } from '../../auth/auth.guard';
 
 
 @UseGuards( AuthGuard )

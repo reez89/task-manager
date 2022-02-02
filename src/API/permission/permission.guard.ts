@@ -1,8 +1,8 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { AuthService } from 'src/auth/auth.service';
-import { Role } from 'src/entities/role.entity';
-import { User } from 'src/entities/user.entity';
+import { AuthService } from '../../auth/auth.service';
+import { Role } from '../../entities/role.entity';
+import { User } from '../../entities/user.entity';
 import { RoleService } from '../role/role.service';
 import { UserService } from '../user/user.service';
 
