@@ -105,4 +105,7 @@ http://localhost:3000/projects/{id}
 
 #Permissions and admin role permissions
 "seed:permissions": "ts-node src/seeding/permissions.seeder.ts"
+
+# Clients
+"seed:clients": "ts-node src/seeding/clients.seeder.ts"
 ```

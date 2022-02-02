@@ -25,7 +25,8 @@
     "seed:users": "ts-node src/seeding/users.seeder.ts",
     "seed:projects": "ts-node src/seeding/projects.seeder.ts",
     "seed:tasks": "ts-node src/seeding/tasks.seeder.ts",
-    "seed:permissions": "ts-node src/seeding/permissions.seeder.ts"
+    "seed:permissions": "ts-node src/seeding/permissions.seeder.ts",
+    "seed:clients": "ts-node src/seeding/clients.seeder.ts"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
