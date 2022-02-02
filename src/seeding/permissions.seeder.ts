@@ -26,20 +26,26 @@ import { RoleService } from '../API/role/role.service';
             'edit_user'
         ];
 
-    let permissionsArray: number[] = [];
+    let adminPermission: number[] = [];
     for ( let i = 0; i < permissions.length; i++ ) {
         await permissionService.create( {
             name: permissions[ i ],
         } );
 
-        permissionsArray.push( i + 1 );
+        adminPermission.push( i + 1 );
 
     }
 
     await roleService.create( {
-        name: 'Admin',
-        permissions: permissionsArray.map( id => ( { id } ) )
+        name: 'Project Manager',
+        permissions: adminPermission.map( id => ( { id } ) )
+    } );
+
+
+    await roleService.create( {
+        name: 'Developer',
+        permissions: [ { id: 6 } ]
     } );
 
     process.exit();
-} )(); 
+} )();  
