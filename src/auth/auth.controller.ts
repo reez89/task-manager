@@ -5,13 +5,16 @@ import { JwtService } from '@nestjs/jwt';
 import { Response, Request } from 'express';
 import { AuthGuard } from './auth.guard';
 import { UserService } from '../API/user/user.service';
+import { AuthService } from './auth.service';
+import { User } from 'src/entities/user.entity';
 
 
 @Controller( 'auth' )
 export class AuthController {
     constructor(
         private userService: UserService,
-        private jwtService: JwtService
+        private jwtService: JwtService,
+        private auth: AuthService,
     ) {}
 
     @UseInterceptors( ClassSerializerInterceptor )
@@ -39,7 +42,8 @@ export class AuthController {
         @Body( 'password' ) password: string,
         @Res( { passthrough: true } ) response: Response
     ) {
-        const user = await this.userService.find( { userName } );
+        const user: User = await this.userService.find( { userName }, [ 'role' ] );
+
 
         if ( !user ) {
             throw new NotFoundException( 'User not found' );
@@ -59,11 +63,9 @@ export class AuthController {
     @UseInterceptors( ClassSerializerInterceptor )
     @Get( 'user' )
     async user( @Req() request: Request ) {
-        const cookie = await request.cookies[ 'jwt' ];
+        const id = await this.auth.userId( request );
 
-        const data = await this.jwtService.verifyAsync( cookie );
-
-        return this.userService.find( { id: data.id } );
+        return this.userService.find( { id }, [ 'role' ] );
     }
 
     @Post( 'logout' )

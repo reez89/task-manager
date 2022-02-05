@@ -4,5 +4,6 @@ export interface PaginatedResult {
         total: number,
         page: number,
         lastPage: number;
+        pageSize: number;
     };
 }

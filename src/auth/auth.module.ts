@@ -7,17 +7,19 @@ import { AuthController } from './auth.controller';
 import { CommonModule } from '../common/common.module';
 import { UserService } from '../API/user/user.service';
 import { UserModule } from '../API/user/user.module';
+import { Role } from 'src/entities/role.entity';
+import { RoleService } from 'src/API/role/role.service';
 
 
 
 @Module( {
   imports: [
-    TypeOrmModule.forFeature( [ User ] ),
+    TypeOrmModule.forFeature( [ User, Role ] ),
     PassportModule,
     forwardRef( () => UserModule ),
     CommonModule
   ],
-  providers: [ AuthService, UserService ],
+  providers: [ AuthService, UserService, RoleService ],
   exports: [ AuthService ],
   controllers: [ AuthController ]
 } )

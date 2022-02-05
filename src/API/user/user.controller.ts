@@ -19,8 +19,12 @@ export class UserController {
     @UseInterceptors( ClassSerializerInterceptor )
     @Get()
     @HasPermission( 'user' )
-    async getAllUsers( @Query( 'page' ) page: number = 1 ) {
-        return this.userService.paginate( page, [ 'role', 'task' ] );
+    async getAllUsers(
+        @Query( 'page' ) page: number = 1,
+        @Query( 'pageSize' ) pageSize: number
+    ) {
+        return this.userService.paginate(
+            page, [ 'role', 'task' ], pageSize );
 
     }
 
@@ -43,7 +47,7 @@ export class UserController {
     @HasPermission( 'user' )
 
     async getUserById( @Param( 'id' ) id: number ) {
-        return this.userService.find( { id }, [ 'role', 'task' ] );
+        return this.userService.find( { id }, [ 'role', ' task' ] );
     }
 
     @Put( ':id' )
