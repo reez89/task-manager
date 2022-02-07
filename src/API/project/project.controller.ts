@@ -13,29 +13,28 @@ import { AuthGuard } from '../../auth/auth.guard';
 export class ProjectController {
     constructor( private projectService: ProjectService ) {}
 
-    @HasPermission( 'client' )
+    @HasPermission( 'project' )
     @Get()
-    async getProjects( @Query( 'page' ) page: number = 1 ) {
+    async getProjects( @Query( 'page' ) page: number = 1, @Query( 'pageSize' ) pageSize: number ) {
 
-        return this.projectService.paginate( page, [ 'client', 'task' ] );
+        return this.projectService.paginate( page, [ 'client', 'task' ], pageSize );
     }
 
-    @HasPermission( 'client' )
+    @HasPermission( 'project' )
     @Post()
     async create( @Body() body: ProjectCreateDto ) {
-        const { client_id, ...data } = body;
+        const { ...data } = body;
         return this.projectService.create( {
             ...data,
-            client: { id: client_id }
         } );
     }
-    @HasPermission( 'client' )
+    @HasPermission( 'project' )
     @Get( ':id' )
     async get( @Param( 'id' ) id: number ) {
         return this.projectService.find( { id } );
     }
 
-    @HasPermission( 'client' )
+    @HasPermission( 'project' )
     @Put( ':id' )
     async update(
         @Param( 'id' ) id: number,
@@ -49,7 +48,7 @@ export class ProjectController {
 
         return this.projectService.find( { id } );
     }
-    @HasPermission( 'client' )
+    @HasPermission( 'project' )
     @Delete( ':id' )
     async delete( @Param( 'id' ) id: number ) {
         return this.projectService.delete( id );

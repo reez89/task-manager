@@ -9,8 +9,8 @@ export class ClientController {
 
 
     @Get()
-    all( @Query( 'page' ) page: number = 1 ) {
-        return this.clientService.paginate( page, [ 'projects' ] );
+    all( @Query( 'page' ) page: number = 1, @Query( 'pageSize' ) pageSize: number ) {
+        return this.clientService.paginate( page, [ 'projects' ], pageSize );
     }
 
     @Post()

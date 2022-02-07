@@ -42,17 +42,13 @@ export class AuthController {
         @Body( 'password' ) password: string,
         @Res( { passthrough: true } ) response: Response
     ) {
-        const user: User = await this.userService.find( { userName }, [ 'role' ] );
-
-
+        const user = await this.userService.find( { userName }, [ 'role' ] );
         if ( !user ) {
             throw new NotFoundException( 'User not found' );
         }
-
         if ( !await bcrypt.compare( password, user.password ) ) {
             throw new BadRequestException( 'invalid credentials' );
         }
-
         const jwt = await this.jwtService.signAsync( { id: user.id } );
 
         response.cookie( 'jwt', jwt, { httpOnly: true } );

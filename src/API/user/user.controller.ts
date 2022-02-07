@@ -18,7 +18,7 @@ export class UserController {
 
     @UseInterceptors( ClassSerializerInterceptor )
     @Get()
-    @HasPermission( 'user' )
+    // @HasPermission( 'user' )
     async getAllUsers(
         @Query( 'page' ) page: number = 1,
         @Query( 'pageSize' ) pageSize: number
@@ -47,7 +47,7 @@ export class UserController {
     @HasPermission( 'user' )
 
     async getUserById( @Param( 'id' ) id: number ) {
-        return this.userService.find( { id }, [ 'role', ' task' ] );
+        return this.userService.find( { id }, [ 'role', 'task' ] );
     }
 
     @Put( ':id' )

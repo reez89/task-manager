@@ -17,9 +17,9 @@ export class TaskController {
 
     @UseInterceptors( ClassSerializerInterceptor )
     @Get()
-    async all( @Query( 'page' ) page: number = 1 ) {
+    async all( @Query( 'page' ) page: number = 1, @Query( 'pageSize' ) pageSize: number ) {
 
-        return this.taskService.paginate( page, [ 'user' ] );
+        return this.taskService.paginate( page, [ 'user' ], pageSize );
     }
     @HasPermission( 'task' )
     @Post()
