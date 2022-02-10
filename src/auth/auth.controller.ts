@@ -42,7 +42,7 @@ export class AuthController {
         @Body( 'password' ) password: string,
         @Res( { passthrough: true } ) response: Response
     ) {
-        const user = await this.userService.find( { userName }, [ 'role' ] );
+        const user = await this.userService.find( { userName }, [ 'role', 'task' ] );
         if ( !user ) {
             throw new NotFoundException( 'User not found' );
         }

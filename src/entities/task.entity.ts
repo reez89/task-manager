@@ -35,10 +35,5 @@ export class Task {
         },
     )
     user: User;
-
-    // @Expose()
-    // get developer() {
-    //     return this.user;
-    // }
 }
 

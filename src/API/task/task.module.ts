@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from 'src/auth/auth.module';
 import { User } from 'src/entities/user.entity';
 import { CommonModule } from '../../common/common.module';
 import { Project } from '../../entities/project.entity';
 import { Task } from '../../entities/task.entity';
+import { UserModule } from '../user/user.module';
 import { TaskController } from './task.controller';
 import { TaskService } from './task.service';
 
@@ -11,8 +13,11 @@ import { TaskService } from './task.service';
   imports: [
     TypeOrmModule.forFeature( [ Task, Project, User ] ),
     CommonModule,
+    AuthModule,
+    UserModule
   ],
   controllers: [ TaskController ],
-  providers: [ TaskService ]
+  providers: [ TaskService ],
+  exports: [ TaskService ]
 } )
 export class TaskModule {}
