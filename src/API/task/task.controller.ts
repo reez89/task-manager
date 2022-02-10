@@ -31,18 +31,15 @@ export class TaskController {
         @Query( 'page' ) page: number = 1,
         @Query( 'pageSize' ) pageSize: number,
         @Req() request: Request ) {
-        try {
-            const id = await this.auth.userId( request );
-            const user: User = await this.userService.find( { id }, [ 'task', 'role' ] );
 
-            if ( user.role.name !== 'Admin' ) {
-                return {
-                    message: 'You are not an Admin, please contact your Project Manager'
-                };
+        const id = await this.auth.userId( request );
+        const user: User = await this.userService.find( { id }, [ 'task', 'role' ] );
+
+        if ( user.role.name !== 'Admin' ) {
+            return {
+                message: 'You are not an Admin, please contact your Project Manager'
             };
-        } catch ( e ) {
-            return { message: 'You are not an Admin, please contact your Project Manager' };
-        }
+        };
 
         return this.taskService.paginate( page, [ 'user' ], pageSize );
     }
@@ -75,15 +72,12 @@ export class TaskController {
     @HasPermission( 'task' )
     @Get( ':id' )
     async get( @Param( 'id' ) id: number, @Req() request: Request ) {
-        try {
-            const userId = await this.auth.userId( request );
-            const user: User = await this.userService.find( { id: userId }, [ 'task', 'role' ] );
-            if ( user.role.name !== 'Admin' ) {
-                return { message: 'The task you are looking for does not belongs to you' };
-            };
-        } catch ( e ) {
-            return { message: 'You are not an Admin, please contact your Project Manager' };
-        }
+
+        const userId = await this.auth.userId( request );
+        const user: User = await this.userService.find( { id: userId }, [ 'task', 'role' ] );
+        if ( user.role.name !== 'Admin' ) {
+            return { message: 'The task you are looking for does not belongs to you' };
+        };
         return this.taskService.find( { id } );
     }
 
