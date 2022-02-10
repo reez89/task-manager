@@ -1,11 +1,14 @@
 import { Injectable } from '@nestjs/common';
+import { AuthService } from 'src/auth/auth.service';
 import { Repository } from 'typeorm';
 import { PaginatedResult } from './paginated-result.interface';
 
 @Injectable()
 export abstract class AbstractService {
 
-    constructor( protected readonly repository: Repository<any> ) {}
+    constructor( 
+        protected readonly repository: Repository<any>,
+        ) {}
 
     async all( relations: any = [] ): Promise<any[]> {
         return this.repository.find( { relations } );
@@ -49,4 +52,5 @@ export abstract class AbstractService {
     async delete( id: number ): Promise<any> {
         return this.repository.delete( id );
     }
+
 }

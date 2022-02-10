@@ -22,7 +22,6 @@ export class TaskController {
         private auth: AuthService,
         private userService: UserService ) {}
 
-
     // IN QUESTO METODO, IMPEDISCO AD UTENTE CON RUOLO DIVERSO DA ADMIN, DI ACCEDERE A TUTTE LE TASKS
     @UseInterceptors( ClassSerializerInterceptor )
     @HasPermission( 'task' )
@@ -33,7 +32,7 @@ export class TaskController {
         @Req() request: Request ) {
 
         const id = await this.auth.userId( request );
-        const user: User = await this.userService.find( { id }, [ 'task', 'role' ] );
+        const user = await this.taskService.getLoggedUser(id, request)
 
         if ( user.role.name !== 'Admin' ) {
             return {
@@ -51,7 +50,7 @@ export class TaskController {
     async userTask(
         @Req() request: Request ) {
         const id = await this.auth.userId( request );
-        const user = await this.userService.find( { id }, [ 'task' ] );
+        const user = await this.taskService.getLoggedUser(id, request)
 
         return {
             task: user.task
@@ -69,18 +68,19 @@ export class TaskController {
         } );
     }
     // UN UTENTE NON ADMIN NON PUO' ACCEDERE AD ALTRE TASKS
+    @UseInterceptors( ClassSerializerInterceptor )
     @HasPermission( 'task' )
     @Get( ':id' )
     async get( @Param( 'id' ) id: number, @Req() request: Request ) {
 
-        const userId = await this.auth.userId( request );
-        const user: User = await this.userService.find( { id: userId }, [ 'task', 'role' ] );
-        if ( user.role.name !== 'Admin' ) {
+        const user = await this.taskService.getLoggedUser(id, request)
+
+        if ( user.role?.name !== 'Admin' ) {
             return { message: 'The task you are looking for does not belongs to you' };
         };
+        
         return this.taskService.find( { id } );
     }
-
 
     // UN UTENTE PUO' MODIFICARE SOLAMENTE LO STATE DELLE SUE TASK, SENZA POTER MODIFICARE IL RESTO.
     @HasPermission( 'task' )
@@ -90,23 +90,17 @@ export class TaskController {
         @Body() body: TaskUpdateDto,
         @Body() bodyAdmin: TaskAdminUpdateDto,
         @Req() request: Request
-    ) {
-        //prendo lo userId che ha effettuato il login
-        const userIds = await this.auth.userId( request );
-
-        //recupero i dati dello user
-        const user: User = await this.userService.find( { id: userIds }, [ 'task', 'role' ] );
-        //mappo tutti gli id delle task
-        const usersTaskId = await user.task.map( task => task.id ).toString();
+    ) {   
+        const user = await this.taskService.getUserTasksIds(id, request)
         //verifico che gli id trovati, corrisponando con l'id della task che voglio modificare
-        if ( usersTaskId.includes( id.toString() ) ) {
+        if ( user.includes( id.toString() ) ) {
             const data = body;
             await this.taskService.update( id, {
                 state: data.state
             } );
             return this.taskService.find( { id } );
             //se l'utente loggato e' un admin, allora puo' modificare il post a piacimento
-        } else if ( user.role.name === 'Admin' ) {
+        } else if ( user.role?.name === 'Admin' ) {
             const { project_id, user_id, ...data } = bodyAdmin;
             await this.taskService.update( id, {
                 ...data,
@@ -120,10 +114,16 @@ export class TaskController {
             message: 'YOU CANNOT MODIFY THIS TASK'
         };
     }
-    @HasPermission( 'task' )
 
+    @HasPermission( 'task' )
     @Delete( ':id' )
-    async delete( @Param( 'id' ) id: number ) {
+    async delete( @Param( 'id' ) id: number, @Req() request: Request ) {
+
+        const user = await this.taskService.getLoggedUser(id, request)
+        if ( user.role?.name !== 'Admin' ) {
+            return { message: 'To delete a task contact your Admin' };
+        };
+
         return this.taskService.delete( id );
     }
 
