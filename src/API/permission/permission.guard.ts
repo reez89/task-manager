@@ -30,14 +30,9 @@ export class PermissionGuard implements CanActivate {
 
     const user: User = await this.userService.find( { id }, [ 'role', 'task' ] );
     const role: Role = await this.roleService.find( { id: user.role.id }, [ 'permissions' ] );
-    const task: Task = await this.taskService.find( { id: user.id } );
-    const userTasks = await user.task.map( task => task.id );
-    console.log( userTasks );
-    console.log( task );
-    if ( request.method === 'GET' ) {
-      // se lo user ha edit ha anche view.
-      return role.permissions.some( p => p.name === `edit_${access}` );
 
+    if ( request.method === 'GET' ) {
+      return role.permissions.some( p => p.name === `edit_${access}` );
     }
     return role.permissions.some( p => p.name === `edit_${access}` );
   }

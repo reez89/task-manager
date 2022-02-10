@@ -11,6 +11,7 @@ import { UserService } from '../user/user.service';
 import { Response, Request } from 'express';
 import { TaskService } from './task.service';
 import { User } from 'src/entities/user.entity';
+import { TaskAdminUpdateDto } from 'src/models/task-adminUpdate';
 
 @UseGuards( AuthGuard )
 @Controller( 'task' )
@@ -32,15 +33,14 @@ export class TaskController {
         @Req() request: Request ) {
         try {
             const id = await this.auth.userId( request );
-            const user: User = await this.userService.find( { id }, [ 'task' ] );
-            console.log( user );
+            const user: User = await this.userService.find( { id }, [ 'task', 'role' ] );
+
             if ( user.role.name !== 'Admin' ) {
                 return {
-                    task: []
+                    message: 'You are not an Admin, please contact your Project Manager'
                 };
             };
         } catch ( e ) {
-
             return { message: 'You are not an Admin, please contact your Project Manager' };
         }
 
@@ -52,8 +52,6 @@ export class TaskController {
     @HasPermission( 'task' )
     @Get( 'user-tasks' )
     async userTask(
-        @Query( 'page' ) page: number = 1,
-        @Query( 'pageSize' ) pageSize: number,
         @Req() request: Request ) {
         const id = await this.auth.userId( request );
         const user = await this.userService.find( { id }, [ 'task' ] );
@@ -73,29 +71,63 @@ export class TaskController {
             user: { id: user_id }
         } );
     }
+    // UN UTENTE NON ADMIN NON PUO' ACCEDERE AD ALTRE TASKS
     @HasPermission( 'task' )
     @Get( ':id' )
-    async get( @Param( 'id' ) id: number ) {
+    async get( @Param( 'id' ) id: number, @Req() request: Request ) {
+        try {
+            const userId = await this.auth.userId( request );
+            const user: User = await this.userService.find( { id: userId }, [ 'task', 'role' ] );
+            if ( user.role.name !== 'Admin' ) {
+                return { message: 'The task you are looking for does not belongs to you' };
+            };
+        } catch ( e ) {
+            return { message: 'You are not an Admin, please contact your Project Manager' };
+        }
         return this.taskService.find( { id } );
     }
 
+
+    // UN UTENTE PUO' MODIFICARE SOLAMENTE LO STATE DELLE SUE TASK, SENZA POTER MODIFICARE IL RESTO.
     @HasPermission( 'task' )
     @Put( ':id' )
     async updateTask(
         @Param( 'id' ) id: number,
-        @Body() body: TaskUpdateDto
+        @Body() body: TaskUpdateDto,
+        @Body() bodyAdmin: TaskAdminUpdateDto,
+        @Req() request: Request
     ) {
-        const { project_id, user_id, ...data } = body;
+        //prendo lo userId che ha effettuato il login
+        const userIds = await this.auth.userId( request );
 
-        await this.taskService.update( id, {
-            ...data,
-            project: { id: project_id },
-            user: { id: user_id }
-        } );
+        //recupero i dati dello user
+        const user: User = await this.userService.find( { id: userIds }, [ 'task', 'role' ] );
+        //mappo tutti gli id delle task
+        const usersTaskId = await user.task.map( task => task.id ).toString();
+        //verifico che gli id trovati, corrisponando con l'id della task che voglio modificare
+        if ( usersTaskId.includes( id.toString() ) ) {
+            const data = body;
+            await this.taskService.update( id, {
+                state: data.state
+            } );
+            return this.taskService.find( { id } );
+            //se l'utente loggato e' un admin, allora puo' modificare il post a piacimento
+        } else if ( user.role.name === 'Admin' ) {
+            const { project_id, user_id, ...data } = bodyAdmin;
+            await this.taskService.update( id, {
+                ...data,
+                project: { id: project_id },
+                user: { id: user_id }
+            } );
+            return this.taskService.find( { id } );
+        }
 
-        return this.taskService.find( { id } );
+        return {
+            message: 'YOU CANNOT MODIFY THIS TASK'
+        };
     }
     @HasPermission( 'task' )
+
     @Delete( ':id' )
     async delete( @Param( 'id' ) id: number ) {
         return this.taskService.delete( id );
